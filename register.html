@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luna — Create Your Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose: #f4a8b8;
+    --rose-deep: #e07a94;
+    --lavender: #c9b8e8;
+    --lavender-deep: #9b87cc;
+    --peach: #f8c8a0;
+    --peach-deep: #e8a070;
+    --mint: #a8d8c8;
+    --mint-deep: #6bb8a0;
+    --cream: #fdf6ee;
+    --cream-2: #f5ede0;
+    --gold: #d4a868;
+    --gold-light: #f0d4a0;
+    --text-dark: #3a2a35;
+    --text-mid: #6b5060;
+    --text-light: #9a8090;
+    --glass-bg: rgba(255,255,255,0.18);
+    --glass-border: rgba(255,255,255,0.35);
+    --glass-shadow: 0 8px 60px rgba(180,120,140,0.18);
+    --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    --success: #6bb8a0;
+    --danger: #e07a94;
+  }
+
+  [data-theme="dark"] {
+    --cream: #1e1520;
+    --cream-2: #2a1e28;
+    --text-dark: #f5e8f0;
+    --text-mid: #d4b8c8;
+    --text-light: #a08090;
+    --glass-bg: rgba(40,20,35,0.55);
+    --glass-border: rgba(255,200,220,0.18);
+    --glass-shadow: 0 8px 60px rgba(100,40,80,0.35);
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream);
+    overflow-x: hidden;
+    transition: background var(--transition);
+  }
+
+  /* ─── Animated Background ─── */
+  .bg-scene {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg,
+      #fce8f0 0%, #f8e4f4 15%, #ede8fa 30%,
+      #e4f4f0 50%, #fef0e8 70%, #fce8f0 100%);
+    transition: background var(--transition);
+  }
+  [data-theme="dark"] .bg-scene {
+    background: linear-gradient(135deg,
+      #2a1525 0%, #1e1030 20%, #0e1a28 45%,
+      #0a1e18 65%, #1e0e20 85%, #2a1525 100%);
+  }
+  .bg-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.45;
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .orb1 { width: 500px; height: 500px; top: -120px; right: -100px;
+    background: radial-gradient(circle, #c9b8e8, #a8d8c8);
+    animation-delay: 0s; }
+  .orb2 { width: 380px; height: 380px; bottom: -80px; left: -80px;
+    background: radial-gradient(circle, #f4a8b8, #f8c8a0);
+    animation-delay: -4s; }
+  .orb3 { width: 280px; height: 280px; top: 40%; left: 35%;
+    background: radial-gradient(circle, #e8c8f8, #a8d8c8);
+    animation-delay: -8s; opacity: 0.3; }
+  @keyframes orbFloat {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-20px) scale(1.05); }
+    66% { transform: translate(-20px,15px) scale(0.95); }
+  }
+
+  /* ─── Floating Beauty Elements ─── */
+  .floaties { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .floatie {
+    position: absolute;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+  }
+
+  /* ─── Page Layout ─── */
+  .page {
+    position: relative; z-index: 2; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 2rem 1rem; gap: 1.5rem;
+  }
+
+  /* ─── Dark Mode Toggle ─── */
+  .theme-toggle {
+    position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100;
+    width: 52px; height: 28px;
+    background: var(--glass-bg); backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px; cursor: pointer;
+    display: flex; align-items: center; padding: 3px;
+    transition: var(--transition);
+    box-shadow: 0 2px 12px rgba(180,120,140,0.2);
+  }
+  .theme-toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--lavender), var(--mint));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; transition: var(--transition);
+    box-shadow: 0 2px 6px rgba(140,100,180,0.35);
+  }
+  [data-theme="dark"] .theme-toggle-knob { transform: translateX(24px); }
+
+  /* ─── Logo ─── */
+  .brand { text-align: center; animation: fadeDown 0.8s ease both; }
+  .brand-logo {
+    width: 64px; height: 64px; margin: 0 auto 0.5rem;
+    background: linear-gradient(135deg, var(--lavender), var(--mint), var(--rose));
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 30px rgba(160,140,200,0.35);
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--lavender-deep), var(--mint-deep), var(--rose-deep));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.08em;
+  }
+
+  /* ─── Glass Card ─── */
+  .card {
+    width: 100%; max-width: 480px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 2.25rem 2rem;
+    box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.4);
+    animation: fadeUp 0.9s ease both 0.2s;
+    transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  }
+
+  /* ─── Step Progress ─── */
+  .steps-bar {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin-bottom: 1.5rem;
+  }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0;
+    border: 1.5px solid var(--glass-border);
+    background: rgba(255,255,255,0.2);
+    color: var(--text-light);
+    transition: all 0.4s ease; cursor: default;
+    position: relative; z-index: 1;
+  }
+  .step-dot.active {
+    background: linear-gradient(135deg, var(--lavender-deep), var(--mint-deep));
+    border-color: transparent; color: white;
+    box-shadow: 0 4px 16px rgba(155,135,204,0.4);
+  }
+  .step-dot.done {
+    background: linear-gradient(135deg, var(--mint-deep), var(--mint));
+    border-color: transparent; color: white;
+    box-shadow: 0 4px 12px rgba(107,184,160,0.3);
+  }
+  .step-line {
+    flex: 1; height: 2px; max-width: 48px;
+    background: var(--glass-border);
+    border-radius: 2px; transition: background 0.4s ease;
+    position: relative;
+  }
+  .step-line.filled { background: linear-gradient(90deg, var(--mint-deep), var(--lavender)); }
+  .step-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.65rem; color: var(--text-light); letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 1.5rem; padding: 0 4px;
+  }
+  .step-labels span { text-align: center; width: 33%; }
+  .step-labels span.active-lbl { color: var(--lavender-deep); font-weight: 600; }
+
+  .welcome-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 400; font-style: italic;
+    color: var(--text-mid); text-align: center;
+    margin-bottom: 1.5rem; line-height: 1.5;
+  }
+  .welcome-text span { color: var(--lavender-deep); font-weight: 600; font-style: normal; }
+
+  /* ─── Form Steps ─── */
+  .form-step { display: none; }
+  .form-step.active { display: block; animation: stepIn 0.4s ease both; }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(18px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ─── Inputs ─── */
+  .field { margin-bottom: 0.9rem; }
+  .field label {
+    display: block; font-size: 0.73rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 0.35rem;
+  }
+  .input-wrap { position: relative; }
+  .input-wrap .field-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; opacity: 0.5; transition: opacity 0.2s; pointer-events: none;
+    color: var(--lavender-deep);
+  }
+  .input-wrap input:focus + .field-icon,
+  .input-wrap input:focus ~ .field-icon { opacity: 0.9; }
+  .input-wrap .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 4px; opacity: 0.5;
+    transition: opacity 0.2s; color: var(--text-mid);
+  }
+  .input-wrap .eye-btn:hover { opacity: 0.9; }
+
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="password"],
+  .field input[type="tel"],
+  .field input[type="date"],
+  .field select {
+    width: 100%; padding: 0.75rem 0.875rem 0.75rem 2.75rem;
+    background: rgba(255,255,255,0.28); border: 1px solid var(--glass-border);
+    border-radius: 14px; font-family: 'Poppins', sans-serif; font-size: 0.875rem;
+    color: var(--text-dark);
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    outline: none; appearance: none;
+  }
+  [data-theme="dark"] .field input,
+  [data-theme="dark"] .field select { background: rgba(255,255,255,0.07); }
+  .field input::placeholder { color: var(--text-light); }
+  .field select { color: var(--text-mid); }
+  .field select option { background: var(--cream); color: var(--text-dark); }
+
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--lavender);
+    background: rgba(255,255,255,0.45);
+    box-shadow: 0 0 0 3px rgba(201,184,232,0.2), 0 2px 12px rgba(201,184,232,0.15);
+  }
+  [data-theme="dark"] .field input:focus,
+  [data-theme="dark"] .field select:focus { background: rgba(255,255,255,0.12); }
+
+  /* Validation states */
+  .field input.valid   { border-color: var(--mint-deep); }
+  .field input.invalid { border-color: var(--rose-deep); }
+  .field-hint {
+    font-size: 0.7rem; margin-top: 0.3rem; padding-left: 0.25rem;
+    min-height: 1rem; transition: color 0.2s;
+    color: var(--text-light);
+  }
+  .field-hint.ok  { color: var(--mint-deep); }
+  .field-hint.err { color: var(--rose-deep); }
+
+  /* Two-col grid */
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+  /* ─── Password Strength ─── */
+  .pwd-strength {
+    display: flex; gap: 4px; margin-top: 0.5rem;
+  }
+  .pwd-bar {
+    flex: 1; height: 4px; border-radius: 4px;
+    background: var(--glass-border); transition: background 0.3s ease;
+  }
+  .pwd-bar.weak   { background: var(--rose-deep); }
+  .pwd-bar.fair   { background: var(--peach-deep); }
+  .pwd-bar.strong { background: var(--mint-deep); }
+  .pwd-label {
+    font-size: 0.68rem; color: var(--text-light);
+    margin-top: 0.25rem; text-align: right; transition: color 0.2s;
+  }
+
+  /* ─── Skin Type Selector ─── */
+  .skin-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .skin-pill {
+    padding: 0.5rem 0.25rem; border-radius: 12px; cursor: pointer; text-align: center;
+    font-size: 0.72rem; font-weight: 500; color: var(--text-mid);
+    border: 1.5px solid var(--glass-border);
+    background: rgba(255,255,255,0.2);
+    transition: all 0.25s ease; user-select: none;
+  }
+  .skin-pill .pill-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+  .skin-pill:hover { border-color: var(--lavender); background: rgba(201,184,232,0.15); }
+  .skin-pill.selected {
+    background: linear-gradient(135deg, rgba(201,184,232,0.4), rgba(168,216,200,0.3));
+    border-color: var(--lavender-deep); color: var(--lavender-deep);
+    box-shadow: 0 3px 12px rgba(155,135,204,0.2);
+  }
+  [data-theme="dark"] .skin-pill { background: rgba(255,255,255,0.06); }
+
+  /* ─── Concern Tags ─── */
+  .concern-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.25rem; }
+  .concern-tag {
+    padding: 0.3rem 0.75rem; border-radius: 20px; cursor: pointer;
+    font-size: 0.72rem; font-weight: 500; color: var(--text-mid);
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.2);
+    transition: all 0.25s ease; user-select: none;
+  }
+  .concern-tag:hover { border-color: var(--mint); }
+  .concern-tag.selected {
+    background: linear-gradient(135deg, rgba(168,216,200,0.4), rgba(201,184,232,0.3));
+    border-color: var(--mint-deep); color: var(--mint-deep);
+  }
+  [data-theme="dark"] .concern-tag { background: rgba(255,255,255,0.06); }
+
+  /* ─── Avatar Uploader ─── */
+  .avatar-upload {
+    display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .avatar-ring {
+    width: 88px; height: 88px; border-radius: 50%;
+    border: 2.5px dashed var(--lavender);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;
+    background: rgba(201,184,232,0.1);
+  }
+  .avatar-ring:hover { border-color: var(--lavender-deep); background: rgba(201,184,232,0.2); }
+  .avatar-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none; }
+  .avatar-ring .avatar-placeholder { font-size: 2rem; transition: opacity 0.2s; }
+  .avatar-hint { font-size: 0.72rem; color: var(--text-light); text-align: center; }
+  #avatarInput { display: none; }
+
+  /* ─── Checkbox / Terms ─── */
+  .check-row {
+    display: flex; align-items: flex-start; gap: 0.5rem;
+    font-size: 0.8rem; color: var(--text-mid); margin-bottom: 0.75rem;
+    cursor: pointer; user-select: none; line-height: 1.5;
+  }
+  .check-row input[type="checkbox"] {
+    appearance: none; width: 17px; height: 17px; min-width: 17px;
+    border-radius: 5px; border: 1.5px solid var(--lavender);
+    cursor: pointer; position: relative; margin-top: 2px;
+    background: rgba(255,255,255,0.3); transition: var(--transition);
+  }
+  .check-row input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, var(--lavender-deep), var(--mint-deep));
+    border-color: transparent;
+  }
+  .check-row input[type="checkbox"]:checked::after {
+    content: '✓'; position: absolute; top: -1px; left: 2px;
+    color: white; font-size: 11px; font-weight: 700;
+  }
+  .check-row a { color: var(--lavender-deep); text-decoration: none; font-weight: 500; }
+  .check-row a:hover { color: var(--mint-deep); }
+
+  /* ─── Navigation Buttons ─── */
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+  .btn-back {
+    flex: 0 0 auto; padding: 0.875rem 1.25rem; border-radius: 14px; cursor: pointer;
+    font-family: 'Poppins', sans-serif; font-size: 0.875rem; font-weight: 500;
+    background: rgba(255,255,255,0.25); border: 1px solid var(--glass-border);
+    color: var(--text-mid); transition: var(--transition);
+  }
+  .btn-back:hover { background: rgba(255,255,255,0.45); color: var(--text-dark); }
+
+  .btn-next, .btn-submit {
+    flex: 1; padding: 0.875rem;
+    background: linear-gradient(135deg, var(--lavender-deep) 0%, #7a60c0 50%, var(--mint-deep) 100%);
+    background-size: 200% 200%;
+    border: none; border-radius: 14px; cursor: pointer;
+    font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600;
+    color: white; letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(140,100,200,0.4);
+    animation: gradShift 4s ease infinite;
+  }
+  @keyframes gradShift {
+    0%,100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  .btn-next::before, .btn-submit::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-next:hover, .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(140,100,200,0.5);
+  }
+  .btn-next:hover::before, .btn-submit:hover::before { opacity: 1; }
+  .btn-next:active, .btn-submit:active { transform: translateY(0); }
+  .btn-submit.loading .btn-text { opacity: 0; }
+  .btn-submit.loading .btn-spinner { opacity: 1; }
+  .btn-spinner {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .btn-spinner::after {
+    content: ''; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── Divider ─── */
+  .divider {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin: 1.1rem 0; color: var(--text-light); font-size: 0.78rem;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--lavender), transparent);
+    opacity: 0.4;
+  }
+
+  /* ─── Social ─── */
+  .social-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.65rem; }
+  .btn-social {
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    padding: 0.65rem; border-radius: 12px; cursor: pointer; font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif; font-weight: 500;
+    background: rgba(255,255,255,0.3); border: 1px solid var(--glass-border);
+    color: var(--text-dark); transition: var(--transition);
+    backdrop-filter: blur(8px);
+  }
+  [data-theme="dark"] .btn-social { background: rgba(255,255,255,0.08); }
+  .btn-social:hover {
+    background: rgba(255,255,255,0.55);
+    border-color: var(--lavender); transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(201,184,232,0.25);
+  }
+  .btn-social svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ─── Login Link ─── */
+  .login-row {
+    text-align: center; margin-top: 1.1rem;
+    font-size: 0.85rem; color: var(--text-mid);
+  }
+  .login-row a { color: var(--lavender-deep); font-weight: 600; text-decoration: none; transition: color 0.2s; }
+  .login-row a:hover { color: var(--mint-deep); }
+
+  /* ─── Success Screen ─── */
+  .success-screen {
+    display: none; text-align: center; padding: 1rem 0;
+    animation: fadeUp 0.6s ease both;
+  }
+  .success-screen.show { display: block; }
+  .success-bloom {
+    font-size: 4rem; display: block; margin: 0 auto 1rem;
+    animation: bloom 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes bloom {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--lavender-deep), var(--mint-deep));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 0.5rem;
+  }
+  .success-sub { font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 1.5rem; }
+
+  /* ─── Footer ─── */
+  .footer {
+    text-align: center; font-size: 0.75rem; color: var(--text-light);
+    animation: fadeUp 1s ease both 0.6s;
+  }
+
+
+  /* ─── Animations ─── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── Toast ─── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, var(--lavender-deep), var(--mint-deep));
+    color: white; padding: 0.75rem 1.5rem; border-radius: 30px;
+    font-size: 0.85rem; font-weight: 500; z-index: 200;
+    opacity: 0; transition: all 0.4s ease;
+    box-shadow: 0 4px 20px rgba(140,100,200,0.4);
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 520px) {
+    .card { padding: 1.75rem 1.25rem; border-radius: 22px; max-width: 100%; }
+    .brand-name { font-size: 1.65rem; }
+    .field-row { grid-template-columns: 1fr; gap: 0; }
+    .skin-grid { grid-template-columns: repeat(3, 1fr); }
+    .social-grid { gap: 0.45rem; }
+    .btn-social { font-size: 0.72rem; padding: 0.55rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-scene">
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+</div>
+
+<!-- Floating Elements -->
+<div class="floaties" id="floaties"></div>
+
+<!-- Dark Mode Toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+  <div class="theme-toggle-knob" id="themeKnob">☀️</div>
+</button>
+
+<div class="page">
+
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-logo">🌿</div>
+    <div class="brand-name">Luna</div>
+  </div>
+
+  <!-- Card -->
+  <div class="card" id="mainCard">
+
+    <!-- Step Indicators -->
+    <div class="steps-bar" id="stepsBar">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3">3</div>
+    </div>
+    <div class="step-labels" id="stepLabels">
+      <span class="active-lbl" id="lbl1">Your Info</span>
+      <span id="lbl2">Beauty Profile</span>
+      <span id="lbl3">Secure Access</span>
+    </div>
+
+    <p class="welcome-text" id="welcomeText">Begin Your <span>Glow Journey</span></p>
+
+    <!-- ── STEP 1: Personal Info ── -->
+    <div class="form-step active" id="step1">
+
+      <div class="avatar-upload">
+        <div class="avatar-ring" id="avatarRing">
+          <span class="avatar-placeholder">🧖</span>
+          <img id="avatarPreview" src="" alt="Profile photo">
+        </div>
+        <span class="avatar-hint">Tap to add a profile photo</span>
+        <input type="file" id="avatarInput" accept="image/*">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>First Name</label>
+          <div class="input-wrap">
+            <input type="text" id="firstName" placeholder="first name" autocomplete="given-name">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="field-hint" id="hintFname"></div>
+        </div>
+        <div class="field">
+          <label>Last Name</label>
+          <div class="input-wrap">
+            <input type="text" id="lastName" placeholder="last name" autocomplete="family-name">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="email" placeholder="email@email.com" autocomplete="email">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="field-hint" id="hintEmail"></div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Phone (optional)</label>
+          <div class="input-wrap">
+            <input type="tel" id="phone" placeholder="+91 98765 43210">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+        </div>
+        <div class="field">
+          <label>Date of Birth</label>
+          <div class="input-wrap">
+            <input type="date" id="dob" style="padding-left:2.75rem;">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Gender</label>
+        <div class="input-wrap">
+          <select id="gender">
+            <option value="" disabled selected>Select gender</option>
+            <option>She / Her</option>
+            <option>He / Him</option>
+            <option>They / Them</option>
+            <option>Prefer not to say</option>
+          </select>
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M18.36 5.64l1.41-1.41"/></svg>
+        </div>
+      </div>
+
+      <button class="btn-next" type="button" onclick="goStep(2)">
+        Continue — Beauty Profile →
+      </button>
+
+      <div class="divider">or sign up with</div>
+       
+      <div class="login-row" style="text-align: center;">Already have an account? <a href="index.html">Sign In</a></div>
+    </div>
+
+    <!-- ── STEP 2: Beauty Profile ── -->
+    <div class="form-step" id="step2">
+      <div class="field">
+        <label>Skin Type</label>
+        <div class="skin-grid" id="skinGrid">
+          <div class="skin-pill" data-val="Normal"><span class="pill-icon">🌸</span>Normal</div>
+          <div class="skin-pill" data-val="Dry"><span class="pill-icon">🏜️</span>Dry</div>
+          <div class="skin-pill" data-val="Oily"><span class="pill-icon">💧</span>Oily</div>
+          <div class="skin-pill" data-val="Combo"><span class="pill-icon">🌊</span>Combo</div>
+          <div class="skin-pill" data-val="Sensitive"><span class="pill-icon">🌷</span>Sensitive</div>
+          <div class="skin-pill" data-val="Mature"><span class="pill-icon">✨</span>Mature</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Hair Type</label>
+        <div class="skin-grid" id="hairGrid">
+          <div class="skin-pill" data-val="Straight"><span class="pill-icon">〰️</span>Straight</div>
+          <div class="skin-pill" data-val="Wavy"><span class="pill-icon">🌊</span>Wavy</div>
+          <div class="skin-pill" data-val="Curly"><span class="pill-icon">🌀</span>Curly</div>
+          <div class="skin-pill" data-val="Coily"><span class="pill-icon">🔗</span>Coily</div>
+          <div class="skin-pill" data-val="Fine"><span class="pill-icon">🍃</span>Fine</div>
+          <div class="skin-pill" data-val="Thick"><span class="pill-icon">🌿</span>Thick</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Skin & Hair Concerns <span style="opacity:0.6;font-size:0.65rem;">(pick all that apply)</span></label>
+        <div class="concern-tags" id="concernTags">
+          <div class="concern-tag" data-val="Acne">Acne</div>
+          <div class="concern-tag" data-val="Aging">Anti-aging</div>
+          <div class="concern-tag" data-val="Brightening">Brightening</div>
+          <div class="concern-tag" data-val="Hydration">Hydration</div>
+          <div class="concern-tag" data-val="Hairfall">Hair fall</div>
+          <div class="concern-tag" data-val="Dandruff">Dandruff</div>
+          <div class="concern-tag" data-val="Pores">Open pores</div>
+          <div class="concern-tag" data-val="Pigmentation">Pigmentation</div>
+          <div class="concern-tag" data-val="Frizz">Frizz</div>
+          <div class="concern-tag" data-val="Scalp">Scalp care</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Country / Region</label>
+        <div class="input-wrap">
+          <select id="country">
+            <option value="" disabled selected>Select your country</option>
+            <option>India</option><option>United States</option><option>United Kingdom</option>
+            <option>Canada</option><option>Australia</option><option>UAE</option>
+            <option>Singapore</option><option>Germany</option><option>France</option>
+            <option>Other</option>
+          </select>
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" type="button" onclick="goStep(1)">← Back</button>
+        <button class="btn-next" type="button" onclick="goStep(3)">Continue — Set Password →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Password & Terms ── -->
+    <div class="form-step" id="step3">
+
+      <div class="field">
+        <label>Username</label>
+        <div class="input-wrap">
+          <input type="text" id="username" placeholder="enter user name" autocomplete="username">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="field-hint" id="hintUser">Pick a unique handle for your profile</div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="Create a strong password" autocomplete="new-password" id="pwdField">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <button class="eye-btn" type="button" id="eyeBtn1" aria-label="Toggle password">
+            <svg id="eyeIcon1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="pwd-strength">
+          <div class="pwd-bar" id="bar1"></div>
+          <div class="pwd-bar" id="bar2"></div>
+          <div class="pwd-bar" id="bar3"></div>
+          <div class="pwd-bar" id="bar4"></div>
+        </div>
+        <div class="pwd-label" id="pwdLabel">Enter a password</div>
+      </div>
+
+      <div class="field">
+        <label>Confirm Password</label>
+        <div class="input-wrap">
+          <input type="password" id="confirmPwd" placeholder="Repeat your password" autocomplete="new-password">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <button class="eye-btn" type="button" id="eyeBtn2" aria-label="Toggle confirm password">
+            <svg id="eyeIcon2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="field-hint" id="hintConfirm"></div>
+      </div>
+
+      <label class="check-row">
+        <input type="checkbox" id="terms">
+        I agree to Luna <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+      </label>
+      <label class="check-row">
+        <input type="checkbox" id="newsletter" checked>
+        Send me beauty tips, exclusive offers & product launches 🌸
+      </label>
+      <div class="btn-row">
+        <button class="btn-back" type="button" onclick="goStep(2)">← Back</button>
+        <button class="btn-submit" type="button" id="submitBtn">
+            <span class="btn-text">✨ Create Account</span>
+            <div class="btn-spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── SUCCESS ── -->
+    <div class="success-screen" id="successScreen">
+      <span class="success-bloom">🌺</span>
+      <div class="success-title">Welcome to Luna!</div>
+      <p class="success-sub">Your glow journey begins now.<br>We've sent a verification link to your email.</p>
+      <button class="btn-next" type="button" onclick="window.location.href='index.html'" style="max-width:260px;margin:0 auto;display:block;">
+        Go to My Dashboard →
+      </button>
+    </div>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <p style="margin-top:0.75rem;opacity:0.6;">© 2026 Luna Beauty. All rights reserved.</p>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ─── Dark Mode ─── */
+  const toggle = document.getElementById('themeToggle');
+  const knob   = document.getElementById('themeKnob');
+  let dark = false;
+  toggle.addEventListener('click', () => {
+    dark = !dark;
+    document.body.setAttribute('data-theme', dark ? 'dark' : '');
+    knob.textContent = dark ? '🌙' : '☀️';
+  });
+
+  /* ─── Floating Elements ─── */
+  const floatItems = ['🍃','🌿','🍀','💧','🫧','✨','⭐','🌟','🧴','💫','🌸','🌺','🪷','🌾'];
+  const floatContainer = document.getElementById('floaties');
+  function spawnFloatie() {
+    const el = document.createElement('div');
+    el.className = 'floatie';
+    el.textContent = floatItems[Math.floor(Math.random() * floatItems.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.bottom = '-60px';
+    el.style.fontSize = (11 + Math.random() * 15) + 'px';
+    const dur = 8 + Math.random() * 12;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = Math.random() * 3 + 's';
+    floatContainer.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 3) * 1000);
+  }
+  for (let i = 0; i < 18; i++) setTimeout(spawnFloatie, i * 500);
+  setInterval(spawnFloatie, 1800);
+
+  /* ─── Toast ─── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ─── Step Logic ─── */
+  let currentStep = 1;
+  const welcomes = [
+    'Begin Your <span>Glow Journey</span>',
+    'Your <span>Beauty Profile</span>',
+    'Almost <span>Glowing!</span>'
+  ];
+  const lblActive = ['lbl1','lbl2','lbl3'];
+
+  function goStep(n) {
+    if (n > currentStep && !validateStep(currentStep)) return;
+    document.getElementById('step' + currentStep).classList.remove('active');
+    currentStep = n;
+    document.getElementById('step' + n).classList.add('active');
+    updateStepUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateStepUI() {
+    [1,2,3].forEach(i => {
+      const dot = document.getElementById('dot' + i);
+      dot.classList.remove('active','done');
+      if (i < currentStep) dot.classList.add('done'), dot.textContent = '✓';
+      else if (i === currentStep) dot.classList.add('active'), dot.textContent = i;
+      else dot.textContent = i;
+    });
+    [1,2].forEach(i => {
+      const line = document.getElementById('line' + i);
+      line.classList.toggle('filled', currentStep > i);
+    });
+    lblActive.forEach((id,idx) => {
+      const el = document.getElementById(id);
+      el.classList.toggle('active-lbl', idx + 1 === currentStep);
+    });
+    document.getElementById('welcomeText').innerHTML = welcomes[currentStep - 1];
+  }
+
+  /* ─── Validation ─── */
+  function validateStep(step) {
+    if (step === 1) {
+      const fn = document.getElementById('firstName').value.trim();
+      const em = document.getElementById('email').value.trim();
+      const hf = document.getElementById('hintFname');
+      const he = document.getElementById('hintEmail');
+      let ok = true;
+      if (!fn) { hf.textContent = '✗ First name is required'; hf.className = 'field-hint err'; ok = false; }
+      else { hf.textContent = ''; }
+      if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
+        he.textContent = '✗ Enter a valid email'; he.className = 'field-hint err'; ok = false;
+      } else { he.textContent = '✓ Looks good!'; he.className = 'field-hint ok'; }
+      if (!ok) showToast('💌 Please fill in your details');
+      return ok;
+    }
+    if (step === 3) return true;
+    return true;
+  }
+
+  /* ─── Skin / Hair Pills ─── */
+  function setupPills(gridId) {
+    document.getElementById(gridId).querySelectorAll('.skin-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.getElementById(gridId).querySelectorAll('.skin-pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+      });
+    });
+  }
+  setupPills('skinGrid');
+  setupPills('hairGrid');
+
+  /* ─── Concern Tags (multi) ─── */
+  document.getElementById('concernTags').querySelectorAll('.concern-tag').forEach(tag => {
+    tag.addEventListener('click', () => tag.classList.toggle('selected'));
+  });
+
+  /* ─── Avatar Upload ─── */
+  const avatarRing    = document.getElementById('avatarRing');
+  const avatarInput   = document.getElementById('avatarInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const avatarPlaceholder = avatarRing.querySelector('.avatar-placeholder');
+  avatarRing.addEventListener('click', () => avatarInput.click());
+  avatarInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      avatarPreview.src = ev.target.result;
+      avatarPreview.style.display = 'block';
+      avatarPlaceholder.style.display = 'none';
+      avatarRing.style.border = '2.5px solid var(--mint-deep)';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ─── Password Strength ─── */
+  const bars  = [1,2,3,4].map(i => document.getElementById('bar' + i));
+  const pwdLbl = document.getElementById('pwdLabel');
+  document.getElementById('password').addEventListener('input', function() {
+    const v = this.value;
+    let strength = 0;
+    if (v.length >= 8) strength++;
+    if (/[A-Z]/.test(v)) strength++;
+    if (/[0-9]/.test(v)) strength++;
+    if (/[^A-Za-z0-9]/.test(v)) strength++;
+    const levels = ['','weak','fair','strong','strong'];
+    const labels = ['Enter a password','Weak — add more variety','Fair — getting there!','Strong — nice!','Very strong 💪'];
+    const colors = ['','#e07a94','#e8a070','#6bb8a0','#6bb8a0'];
+    bars.forEach((b,i) => {
+      b.className = 'pwd-bar';
+      if (i < strength) b.classList.add(levels[strength]);
+    });
+    pwdLbl.textContent = labels[strength];
+    pwdLbl.style.color = colors[strength] || 'var(--text-light)';
+
+    const confirmVal = document.getElementById('confirmPwd').value;
+    if (confirmVal) checkConfirm(v, confirmVal);
+  });
+
+  document.getElementById('confirmPwd').addEventListener('input', function() {
+    checkConfirm(document.getElementById('password').value, this.value);
+  });
+
+  function checkConfirm(pwd, confirm) {
+    const hint = document.getElementById('hintConfirm');
+    if (!confirm) { hint.textContent = ''; return; }
+    if (pwd === confirm) { hint.textContent = '✓ Passwords match'; hint.className = 'field-hint ok'; }
+    else { hint.textContent = '✗ Passwords don\'t match'; hint.className = 'field-hint err'; }
+  }
+
+  /* ─── Eye Toggles ─── */
+  function makeEye(btnId, iconId, inputId) {
+    let vis = false;
+    document.getElementById(btnId).addEventListener('click', () => {
+      vis = !vis;
+      document.getElementById(inputId).type = vis ? 'text' : 'password';
+      document.getElementById(iconId).innerHTML = vis
+        ? '<line x1="1" y1="1" x2="23" y2="23"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 7 11 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.53 13.53 0 0 0 1 12s4 7 11 7a9.74 9.74 0 0 0 5.39-1.61"/>'
+        : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    });
+  }
+  makeEye('eyeBtn1','eyeIcon1','password');
+  makeEye('eyeBtn2','eyeIcon2','confirmPwd');
+
+  /* ─── Submit ─── */
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    const pwd     = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmPwd').value;
+    const terms   = document.getElementById('terms').checked;
+    const user    = document.getElementById('username').value.trim();
+
+    if (!user)            { showToast('🌿 Please choose a username'); return; }
+    if (pwd.length < 6)   { showToast('🔒 Password too short'); return; }
+    if (pwd !== confirm)  { showToast('✗ Passwords don\'t match'); return; }
+    if (!terms)           { showToast('📋 Please accept the terms'); return; }
+
+    this.classList.add('loading');
+    setTimeout(() => {
+      this.classList.remove('loading');
+      /* Show success */
+      document.getElementById('step3').classList.remove('active');
+      document.getElementById('stepsBar').style.display = 'none';
+      document.getElementById('stepLabels').style.display = 'none';
+      document.getElementById('welcomeText').style.display = 'none';
+      document.getElementById('loginRowBottom').style.display = 'none';
+      document.getElementById('successScreen').classList.add('show');
+    }, 2000);
+  });
+  /* ─── Social Signup ─── */
+  function socialSignup(provider) {
+    showToast(`Connecting with ${provider}… 🌿`);
+  }
+  document.getElementById("submitBtn").addEventListener("click", function(){
+    window.location.href = "dashboard.html";
+  });
+</script>
+</body>
+</html>

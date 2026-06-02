@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luna — Glow Naturally, Care Beautifully</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose: #f4a8b8;
+    --rose-deep: #e07a94;
+    --lavender: #c9b8e8;
+    --lavender-deep: #9b87cc;
+    --peach: #f8c8a0;
+    --peach-deep: #e8a070;
+    --mint: #a8d8c8;
+    --mint-deep: #6bb8a0;
+    --cream: #fdf6ee;
+    --cream-2: #f5ede0;
+    --gold: #d4a868;
+    --gold-light: #f0d4a0;
+    --text-dark: #3a2a35;
+    --text-mid: #6b5060;
+    --text-light: #9a8090;
+    --glass-bg: rgba(255,255,255,0.18);
+    --glass-border: rgba(255,255,255,0.35);
+    --glass-shadow: 0 8px 60px rgba(180,120,140,0.18);
+    --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  [data-theme="dark"] {
+    --cream: #1e1520;
+    --cream-2: #2a1e28;
+    --text-dark: #f5e8f0;
+    --text-mid: #d4b8c8;
+    --text-light: #a08090;
+    --glass-bg: rgba(40,20,35,0.55);
+    --glass-border: rgba(255,200,220,0.18);
+    --glass-shadow: 0 8px 60px rgba(100,40,80,0.35);
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: var(--cream);
+    overflow-x: hidden;
+    transition: background var(--transition);
+  }
+
+  /* ─── Animated Background ─── */
+  .bg-scene {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg,
+      #fce8f0 0%, #f8e4f4 15%, #ede8fa 30%,
+      #e4f4f0 50%, #fef0e8 70%, #fce8f0 100%);
+    transition: background var(--transition);
+  }
+  [data-theme="dark"] .bg-scene {
+    background: linear-gradient(135deg,
+      #2a1525 0%, #1e1030 20%, #0e1a28 45%,
+      #0a1e18 65%, #1e0e20 85%, #2a1525 100%);
+  }
+  .bg-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.45;
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .orb1 { width: 500px; height: 500px; top: -120px; right: -100px;
+    background: radial-gradient(circle, #f4a8b8, #c9b8e8);
+    animation-delay: 0s; }
+  .orb2 { width: 380px; height: 380px; bottom: -80px; left: -80px;
+    background: radial-gradient(circle, #a8d8c8, #f8c8a0);
+    animation-delay: -4s; }
+  .orb3 { width: 280px; height: 280px; top: 40%; left: 35%;
+    background: radial-gradient(circle, #e8c8f8, #f4a8b8);
+    animation-delay: -8s; opacity: 0.3; }
+  @keyframes orbFloat {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-20px) scale(1.05); }
+    66% { transform: translate(-20px,15px) scale(0.95); }
+  }
+
+  /* ─── Floating Beauty Elements ─── */
+  .floaties { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .floatie {
+    position: absolute;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+  }
+  .leaf { font-size: 22px; }
+  .drop { font-size: 16px; }
+  .spark { font-size: 14px; }
+  .serum { font-size: 20px; }
+
+  /* ─── Page Layout ─── */
+  .page { position: relative; z-index: 2; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 2rem 1rem; gap: 1.5rem; }
+
+  /* ─── Dark Mode Toggle ─── */
+  .theme-toggle {
+    position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100;
+    width: 52px; height: 28px;
+    background: var(--glass-bg); backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px; cursor: pointer;
+    display: flex; align-items: center; padding: 3px;
+    transition: var(--transition);
+    box-shadow: 0 2px 12px rgba(180,120,140,0.2);
+  }
+  .theme-toggle-knob {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--lavender));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; transition: var(--transition);
+    box-shadow: 0 2px 6px rgba(180,100,140,0.35);
+  }
+  [data-theme="dark"] .theme-toggle-knob { transform: translateX(24px); }
+
+  /* ─── Logo ─── */
+  .brand {
+    text-align: center;
+    animation: fadeDown 0.8s ease both;
+  }
+  .brand-logo {
+    width: 64px; height: 64px; margin: 0 auto 0.5rem;
+    background: linear-gradient(135deg, var(--rose), var(--lavender), var(--mint));
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 30px rgba(180,120,160,0.3);
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--rose-deep), var(--lavender-deep), var(--mint-deep));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.08em;
+  }
+
+  /* ─── Glass Card ─── */
+  .card {
+    width: 100%; max-width: 440px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 2.5rem 2rem;
+    box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.4);
+    animation: fadeUp 0.9s ease both 0.2s;
+    transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .welcome-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 400; font-style: italic;
+    color: var(--text-mid);
+    text-align: center;
+    margin-bottom: 1.75rem;
+    line-height: 1.5;
+  }
+  .welcome-text span { color: var(--rose-deep); font-weight: 600; font-style: normal; }
+
+  /* ─── Inputs ─── */
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block; font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 0.4rem;
+  }
+  .input-wrap { position: relative; }
+  .input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; opacity: 0.5; transition: opacity 0.2s; pointer-events: none; }
+  .input-wrap input:focus ~ svg, .input-wrap input:focus + svg { opacity: 0.9; }
+  .input-wrap .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 4px; opacity: 0.5;
+    transition: opacity 0.2s; color: var(--text-mid);
+  }
+  .input-wrap .eye-btn:hover { opacity: 0.9; }
+  .field input[type="email"], .field input[type="password"], .field input[type="text"] {
+    width: 100%; padding: 0.75rem 0.875rem 0.75rem 2.75rem;
+    background: rgba(255,255,255,0.28); border: 1px solid var(--glass-border);
+    border-radius: 14px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;
+    color: var(--text-dark);
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    outline: none;
+  }
+  [data-theme="dark"] .field input { background: rgba(255,255,255,0.07); }
+  .field input::placeholder { color: var(--text-light); }
+  .field input:focus {
+    border-color: var(--rose);
+    background: rgba(255,255,255,0.45);
+    box-shadow: 0 0 0 3px rgba(244,168,184,0.2), 0 2px 12px rgba(244,168,184,0.15);
+  }
+  [data-theme="dark"] .field input:focus { background: rgba(255,255,255,0.12); }
+
+  /* ─── Row options ─── */
+  .row-opts {
+    display: flex; justify-content: space-between; align-items: center;
+    margin: 0.25rem 0 1.25rem; font-size: 0.8rem;
+  }
+  .remember {
+    display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+    color: var(--text-mid); user-select: none;
+  }
+  .remember input[type="checkbox"] {
+    appearance: none; width: 16px; height: 16px; border-radius: 5px;
+    border: 1.5px solid var(--rose); cursor: pointer; position: relative;
+    background: rgba(255,255,255,0.3); transition: var(--transition);
+  }
+  .remember input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, var(--rose), var(--lavender-deep));
+    border-color: transparent;
+  }
+  .remember input[type="checkbox"]:checked::after {
+    content: '✓'; position: absolute; top: -1px; left: 2px;
+    color: white; font-size: 11px; font-weight: 700;
+  }
+  .forgot { color: var(--rose-deep); text-decoration: none; font-weight: 500;
+    transition: color 0.2s; }
+  .forgot:hover { color: var(--lavender-deep); }
+
+  /* ─── Login Button ─── */
+  .btn-login {
+    width: 100%; padding: 0.875rem;
+    background: linear-gradient(135deg, var(--rose-deep) 0%, #c060a0 50%, var(--lavender-deep) 100%);
+    background-size: 200% 200%;
+    border: none; border-radius: 14px; cursor: pointer;
+    font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600;
+    color: white; letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(180,80,140,0.4);
+    animation: gradShift 4s ease infinite;
+  }
+  @keyframes gradShift {
+    0%,100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .btn-login::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-login:hover { transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(180,80,140,0.5); }
+  .btn-login:hover::before { opacity: 1; }
+  .btn-login:active { transform: translateY(0); }
+  .btn-login.loading .btn-text { opacity: 0; }
+  .btn-login.loading .btn-spinner { opacity: 1; }
+  .btn-spinner {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .btn-spinner::after {
+    content: ''; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── Divider ─── */
+  .divider {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin: 1.25rem 0; color: var(--text-light); font-size: 0.78rem;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+    opacity: 0.4;
+  }
+
+  /* ─── Social Buttons ─── */
+  .social-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.65rem; }
+  .btn-social {
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    padding: 0.65rem; border-radius: 12px; cursor: pointer; font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif; font-weight: 500;
+    background: rgba(255,255,255,0.3); border: 1px solid var(--glass-border);
+    color: var(--text-dark); transition: var(--transition);
+    backdrop-filter: blur(8px);
+  }
+  [data-theme="dark"] .btn-social { background: rgba(255,255,255,0.08); }
+  .btn-social:hover {
+    background: rgba(255,255,255,0.55);
+    border-color: var(--rose); transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(244,168,184,0.2);
+  }
+  .btn-social svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ─── Register Link ─── */
+  .register-row {
+    text-align: center; margin-top: 1.25rem;
+    font-size: 0.85rem; color: var(--text-mid);
+  }
+  .register-row a { color: var(--rose-deep); font-weight: 600; text-decoration: none;
+    transition: color 0.2s; }
+  .register-row a:hover { color: var(--lavender-deep); }
+
+  /* ─── Footer ─── */
+  .footer {
+    text-align: center; font-size: 0.75rem; color: var(--text-light);
+    animation: fadeUp 1s ease both 0.6s;
+  }
+  .footer-links { display: flex; gap: 1.25rem; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .footer-links a { color: var(--text-light); text-decoration: none;
+    transition: color 0.2s; }
+  .footer-links a:hover { color: var(--rose-deep); }
+  .social-icons { display: flex; gap: 0.75rem; justify-content: center; margin-top: 0.5rem; }
+  .social-icons a {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-mid); transition: var(--transition);
+    backdrop-filter: blur(8px);
+  }
+  .social-icons a:hover { background: var(--rose); color: white; transform: translateY(-2px); }
+  .social-icons svg { width: 14px; height: 14px; }
+
+  /* ─── Animations ─── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── Toast ─── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, var(--rose-deep), var(--lavender-deep));
+    color: white; padding: 0.75rem 1.5rem; border-radius: 30px;
+    font-size: 0.85rem; font-weight: 500; z-index: 200;
+    opacity: 0; transition: all 0.4s ease;
+    box-shadow: 0 4px 20px rgba(180,80,140,0.4);
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 480px) {
+    .card { padding: 2rem 1.25rem; border-radius: 22px; }
+    .brand-name { font-size: 1.65rem; }
+    .social-grid { grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+    .btn-social { padding: 0.55rem; font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-scene">
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+</div>
+
+<!-- Floating Beauty Elements -->
+<div class="floaties" id="floaties"></div>
+
+<!-- Dark Mode Toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+  <div class="theme-toggle-knob" id="themeKnob">☀️</div>
+</button>
+
+<!-- Page -->
+<div class="page">
+
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-logo">🌸</div>
+    <div class="brand-name">Luna</div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <p class="welcome-text">Glow Naturally,<br><span>Care Beautifully</span></p>
+
+    <!-- Email -->
+    <div class="field">
+      <label>Email or Username</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--rose-deep)">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <input type="email" id="email" placeholder="you@email.com" autocomplete="email">
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="field">
+      <label>Password</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--rose-deep)">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        <button class="eye-btn" id="eyeBtn" type="button" aria-label="Toggle password visibility">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Options Row -->
+    <div class="row-opts">
+      <label class="remember">
+        <input type="checkbox" id="remember"> Remember me
+      </label>
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <!-- Login Button -->
+    <button class="btn-login" id="loginBtn" type="button" herf="dashboard.html">
+      <span class="btn-text">✨ Sign In</span>
+      <div class="btn-spinner"></div>
+    </button>
+
+
+    <!-- Register -->
+    <div class="register-row">
+      New here? <a href="register.html" id="registerLink">Create an Account</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+
+    <p style="margin-top: 0.75rem; opacity: 0.6;">© 2026 Luna Beauty. All rights reserved.</p>
+  </footer>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ─── Dark Mode ─── */
+  const toggle = document.getElementById('themeToggle');
+  const knob   = document.getElementById('themeKnob');
+  let dark = false;
+  toggle.addEventListener('click', () => {
+    dark = !dark;
+    document.body.setAttribute('data-theme', dark ? 'dark' : '');
+    knob.textContent = dark ? '🌙' : '☀️';
+  });
+
+  /* ─── Floating Elements ─── */
+  const items = ['🍃','🌿','🍀','💧','🫧','✨','⭐','🌟','🧴','💫','🌸','🌺'];
+  const container = document.getElementById('floaties');
+  function spawnFloatie() {
+    const el = document.createElement('div');
+    el.className = 'floatie';
+    el.textContent = items[Math.floor(Math.random() * items.length)];
+    el.style.left   = Math.random() * 100 + 'vw';
+    el.style.bottom = '-60px';
+    el.style.fontSize = (12 + Math.random() * 16) + 'px';
+    const dur = 8 + Math.random() * 12;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay    = Math.random() * 3 + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 3) * 1000);
+  }
+  for (let i = 0; i < 18; i++) setTimeout(spawnFloatie, i * 500);
+  setInterval(spawnFloatie, 1800);
+
+  /* ─── Eye Toggle ─── */
+  const pwdInput = document.getElementById('password');
+  const eyeBtn   = document.getElementById('eyeBtn');
+  const eyeIcon  = document.getElementById('eyeIcon');
+  let pwdVisible = false;
+  eyeBtn.addEventListener('click', () => {
+    pwdVisible = !pwdVisible;
+    pwdInput.type = pwdVisible ? 'text' : 'password';
+    eyeIcon.innerHTML = pwdVisible
+      ? '<line x1="1" y1="1" x2="23" y2="23"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 7 11 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.53 13.53 0 0 0 1 12s4 7 11 7a9.74 9.74 0 0 0 5.39-1.61"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  });
+
+  /* ─── Toast Helper ─── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ─── Login ─── */
+  document.getElementById('loginBtn').addEventListener('click', function() {
+    const email = document.getElementById('email').value.trim();
+    const pwd   = document.getElementById('password').value;
+    if (!email) { showToast('💌 Please enter your email'); return; }
+    if (!pwd)   { showToast('🔒 Please enter your password'); return; }
+    this.classList.add('loading');
+    setTimeout(() => {
+      this.classList.remove('loading');
+      showToast('🌸 Welcome back! Redirecting…');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+    }, 1600);
+  });
+
+  /* ─── Register Link ─── */
+  document.getElementById('registerLink').addEventListener('click', e => {
+    e.preventDefault();
+    window.location.href = 'register.html';
+  });
+
+  /* ─── Social Login ─── */
+  function socialLogin(provider) {
+    showToast(`Connecting with ${provider}… 🌿`);
+  }
+</script>
+</body>
+</html>
